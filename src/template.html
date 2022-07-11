@@ -33,8 +33,58 @@
   </noscript>
 </head>
 
-<body>
-  <div id="app"></div>
+<body onload="setTimeout(function() { simulate(); }, 1000);">
+    <div id="counter"></div>
+    <div id="app"></div>
+    <script>
+    var count = 0;
+    var results = {};
+
+    function simulate() {
+    document.getElementById('app').children[0].children[0].children[0].children[0].children[0].click();
+    setTimeout(function() {
+    var group = document.getElementById('app').children[0].children[1].children[0].children[1].children[0];
+    var pot2 = group.children[1].children[1].children[0].children[0].innerHTML;
+    if (!pot2) {
+    count++;
+    document.getElementById('app').children[0].children[0].children[0].children[0].children[1].click();
+    populateResults();
+    }
+    else {
+    simulate();
+    }
+    }, 5);
+    }
+
+    function populateResults() {
+    for (let i = 7; i > 0; i--) {
+    var group = document.getElementById('app').children[0].children[1].children[0].children[1].children[i];
+    var pot2 = group.children[1].children[1].children[0].children[0].innerHTML;
+    if (!pot2) {
+    setTimeout(function() { populateResults(); }, 5);
+    return;
+    }
+
+    var pot1 = group.children[1].children[0].children[0].children[0].innerHTML;
+
+    var key = pot1 + "%" + pot2;
+    if (results[key]) {
+    results[key]++;
+    }
+    else {
+    results[key] = 1;
+    }
+        }
+        document.getElementById('counter').innerText = count;
+    if (count % 10 === 0) { console.log(new Date().toTimeString() + " " + count); }
+    if (count <= 40000) { simulate(); }
+    else {
+    for (var key in results) {
+    var value = results[key];
+    console.log(key + " - " + value);
+    }
+    }
+    }</script>
 </body>
 
 </html>

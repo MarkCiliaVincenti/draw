@@ -69,7 +69,7 @@ function GroupCellDeferred({
         <MovingContent
           from={`[data-cellid='${team.id}']`}
           to={to}
-          duration={350}
+          duration={1}
           team={team}
           onAnimationEnd={fill}
         />
