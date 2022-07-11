@@ -25,6 +25,7 @@
     <div id="counter" style="padding-left: 100px;"></div>
     <div id="app"></div>
     <script>
+        var limit = 10000;
         var count = 0;
         var results = {};
         var cssActivePot;
@@ -91,14 +92,35 @@
                     results[key] = 1;
                 }
             }
-            document.getElementById('counter').innerText = count + ' (' + Math.round((Date.now() - start) / count) + 'ms per simulation)';
-            if (count < 40000) { simulate(); }
+            if (count % 5 === 0) {
+                var timePerSim = (Date.now() - start) / count;
+                document.getElementById('counter').innerText = count + ' (' + Math.round(timePerSim) + 'ms per simulation) Time left: ' + msToTime(Math.round(((limit - count) * timePerSim)));
+            }
+            if (count < limit) { simulate(); }
             else {
                 for (var key in results) {
                     var value = results[key];
                     console.log(key + " - " + value);
                 }
             }
+        }
+
+        function msToTime(s) {
+
+            // Pad to 2 or 3 digits, default is 2
+            function pad(n, z) {
+                z = z || 2;
+                return ('00' + n).slice(-z);
+            }
+
+            var ms = s % 1000;
+            s = (s - ms) / 1000;
+            var secs = s % 60;
+            s = (s - secs) / 60;
+            var mins = s % 60;
+            var hrs = (s - mins) / 60;
+
+            return pad(hrs) + ':' + pad(mins) + ':' + pad(secs) + '.' + pad(ms, 3);
         }
     </script>
 </body>
