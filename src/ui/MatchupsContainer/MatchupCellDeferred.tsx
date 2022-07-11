@@ -63,7 +63,7 @@ function MatchupCellDeferred({
         <MovingContent
           from={`[data-cellid='${team.id}']`}
           to={to}
-          duration={1}
+          duration={0}
           team={team}
           onAnimationEnd={fill}
         />

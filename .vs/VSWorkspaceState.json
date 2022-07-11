@@ -1,7 +1,16 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\src",
+    "\\src\\data",
+    "\\src\\data\\cl",
+    "\\src\\data\\cl\\gs",
+    "\\src\\data\\cl\\gs\\2021",
+    "\\src\\data\\cl\\gs\\2022",
+    "\\src\\pages",
+    "\\src\\pages\\cl",
+    "\\src\\pages\\cl\\gs"
   ],
-  "SelectedNode": "\\C:\\Users\\user\\Source\\Repos\\draw",
+  "SelectedNode": "\\src\\template.html",
   "PreviewInSolutionExplorer": false
 }
