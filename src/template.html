@@ -24,17 +24,126 @@
 <body onload="setTimeout(function() { initialize(); }, 1000);">
     <div id="counter" style="padding-left: 100px;"></div>
     <div id="app"></div>
+    <div id="results">
+        <table>
+            <thead>
+                <tr>
+                    <th>&nbsp;</th>
+                    <th id="pot2-1"></th>
+                    <th id="pot2-2"></th>
+                    <th id="pot2-3"></th>
+                    <th id="pot2-4"></th>
+                    <th id="pot2-5"></th>
+                    <th id="pot2-6"></th>
+                    <th id="pot2-7"></th>
+                    <th id="pot2-8"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th id="pot1-1"></th>
+                    <td id="1-1"></td>
+                    <td id="1-2"></td>
+                    <td id="1-3"></td>
+                    <td id="1-4"></td>
+                    <td id="1-5"></td>
+                    <td id="1-6"></td>
+                    <td id="1-7"></td>
+                    <td id="1-8"></td>
+                </tr>
+                <tr>
+                    <th id="pot1-2"></th>
+                    <td id="2-1"></td>
+                    <td id="2-2"></td>
+                    <td id="2-3"></td>
+                    <td id="2-4"></td>
+                    <td id="2-5"></td>
+                    <td id="2-6"></td>
+                    <td id="2-7"></td>
+                    <td id="2-8"></td>
+                </tr>
+                <tr>
+                    <th id="pot1-3"></th>
+                    <td id="3-1"></td>
+                    <td id="3-2"></td>
+                    <td id="3-3"></td>
+                    <td id="3-4"></td>
+                    <td id="3-5"></td>
+                    <td id="3-6"></td>
+                    <td id="3-7"></td>
+                    <td id="3-8"></td>
+                </tr>
+                <tr>
+                    <th id="pot1-4"></th>
+                    <td id="4-1"></td>
+                    <td id="4-2"></td>
+                    <td id="4-3"></td>
+                    <td id="4-4"></td>
+                    <td id="4-5"></td>
+                    <td id="4-6"></td>
+                    <td id="4-7"></td>
+                    <td id="4-8"></td>
+                </tr>
+                <tr>
+                    <th id="pot1-5"></th>
+                    <td id="5-1"></td>
+                    <td id="5-2"></td>
+                    <td id="5-3"></td>
+                    <td id="5-4"></td>
+                    <td id="5-5"></td>
+                    <td id="5-6"></td>
+                    <td id="5-7"></td>
+                    <td id="5-8"></td>
+                </tr>
+                <tr>
+                    <th id="pot1-6"></th>
+                    <td id="6-1"></td>
+                    <td id="6-2"></td>
+                    <td id="6-3"></td>
+                    <td id="6-4"></td>
+                    <td id="6-5"></td>
+                    <td id="6-6"></td>
+                    <td id="6-7"></td>
+                    <td id="6-8"></td>
+                </tr>
+                <tr>
+                    <th id="pot1-7"></th>
+                    <td id="7-1"></td>
+                    <td id="7-2"></td>
+                    <td id="7-3"></td>
+                    <td id="7-4"></td>
+                    <td id="7-5"></td>
+                    <td id="7-6"></td>
+                    <td id="7-7"></td>
+                    <td id="7-8"></td>
+                </tr>
+                <tr>
+                    <th id="pot1-8"></th>
+                    <td id="8-1"></td>
+                    <td id="8-2"></td>
+                    <td id="8-3"></td>
+                    <td id="8-4"></td>
+                    <td id="8-5"></td>
+                    <td id="8-6"></td>
+                    <td id="8-7"></td>
+                    <td id="8-8"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
     <script>
         var limit = 10000;
         var count = 0;
         var results = {};
+        var teamsPot1 = {};
+        var teamsPot2 = {};
         var cssActivePot;
         var pot3initial;
         var appHeader;
         var appBody;
         var restartButton;
         var fastDrawButton;
-        var disabledPot = "BaseContent--3zefax Header--mzgbsu PotHeader--kpn8bh kfcSHi gNNDDZ zioST";
+        var disabledPot = "BaseContent--cpwxo1 Header--74zi3e PotHeader--1rmqmm8 bUuxST brtIrb eoqLrz";
         var start;
 
         function initialize() {
@@ -45,6 +154,17 @@
             pot3initial = appBody.children[0].children[0].children[2].children[0].children[0].children[0].children[0].className;
             restartButton = appHeader.children[0].children[0].children[0];
             fastDrawButton = appHeader.children[0].children[0].children[1];
+
+            for (let i = 0; i <= 7; i++)
+            {
+                var pot1 = appBody.children[0].children[0].children[0].children[1].children[i].children[0].innerText;
+                var pot2 = appBody.children[0].children[0].children[1].children[1].children[i].children[0].innerText;
+                document.getElementById('pot1-' + (i + 1)).innerText = pot1;
+                document.getElementById('pot2-' + (i + 1)).innerText = pot2;
+                teamsPot1[pot1] = i + 1;
+                teamsPot2[pot2] = i + 1;
+            }
+
             simulate();
         }
 
@@ -106,10 +226,12 @@
                 var total = 0;
                 for (var key in results) {
                     var value = results[key];
+                    var splitKey = key.split('%');
+                    var pot1Num = teamsPot1[splitKey[0]];
+                    var pot2Num = teamsPot2[splitKey[1]];
                     total = total + value;
-                    console.log(key + " - " + value);
+                    document.getElementById(pot1Num + '-' + pot2Num).innerText = value;
                 }
-                console.log('total is ' + total / 8);
             }
         }
 
