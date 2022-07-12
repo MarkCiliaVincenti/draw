@@ -2,39 +2,135 @@
 <html lang="en" translate="no">
 
 <head>
-  <meta charset="UTF-8">
-  <title>CL draw simulator</title>
-  <meta
-    name="description"
-    content="Champions League draw simulator"
-  >
-  <meta
-    name="author"
-    content="Anton Veselev, inker@protonmail.com"
-  >
-  <meta
-    name="keywords"
-    content="cl,champions league,draw,simulator,inker,football,soccer,europa league"
-  >
-  <meta
-    name="original-source"
-    content="https://github.com/inker/draw"
-  >
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
-  <meta
-    name="google"
-    content="notranslate"
-  >
-  <noscript>
-    Please enable JavaScript to make the app work!
-  </noscript>
+    <meta charset="UTF-8">
+    <title>CL draw simulator</title>
+    <meta name="description"
+          content="Champions League draw simulator">
+    <meta name="author"
+          content="Anton Veselev, inker@protonmail.com">
+    <meta name="keywords"
+          content="cl,champions league,draw,simulator,inker,football,soccer,europa league">
+    <meta name="original-source"
+          content="https://github.com/inker/draw">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+    <meta name="google"
+          content="notranslate">
+    <noscript>
+        Please enable JavaScript to make the app work!
+    </noscript>
 </head>
 
-<body>
-  <div id="app"></div>
+<body onload="setTimeout(function() { initialize(); }, 1000);">
+    <div id="counter" style="padding-left: 100px;"></div>
+    <div id="app"></div>
+    <script>
+        var limit = 10000;
+        var count = 0;
+        var results = {};
+        var cssActivePot;
+        var pot3initial;
+        var appHeader;
+        var appBody;
+        var restartButton;
+        var fastDrawButton;
+        var disabledPot = "BaseContent--3zefax Header--mzgbsu PotHeader--kpn8bh kfcSHi gNNDDZ zioST";
+        var start;
+
+        function initialize() {
+            start = Date.now();
+            appHeader = document.getElementById('app').children[0].children[0];
+            appBody = document.getElementById('app').children[0].children[1];
+            cssActivePot = appBody.children[0].children[0].children[0].children[0].children[0].children[0].children[0].className;
+            pot3initial = appBody.children[0].children[0].children[2].children[0].children[0].children[0].children[0].className;
+            restartButton = appHeader.children[0].children[0].children[0];
+            fastDrawButton = appHeader.children[0].children[0].children[1];
+            simulate();
+        }
+
+        function simulate() {
+            setTimeout(function () {
+                appBody = document.getElementById('app').children[0].children[1];
+                appBody.children[1].style.display = 'none';
+                appBody.children[0].children[1].style.display = 'none';
+                var group = appBody.children[0].children[1].children[0];
+                var pot2 = group.children[1].children[1].children[0].children[0].innerHTML;
+                if (!pot2) {
+                    fastDrawButton.click();
+                    populateResults();
+                }
+                else {
+                    simulate();
+                }
+            }, 1);
+        }
+
+        function populateResults() {
+            var pot2color = appBody.children[0].children[0].children[1].children[0].children[0].children[0].children[0].className;
+            if (pot2color !== disabledPot) {
+                setTimeout(function () { populateResults(); }, 1);
+                return;
+            }
+            var groups = appBody.children[0].children[1];
+            var resultsTemp = new Array(8);
+            for (let i = 7; i >= 0; i--) {
+                var group = groups.children[i];
+                var pot2 = group.children[1].children[1].children[0].children[0].innerHTML;
+                if (!pot2) {
+                    setTimeout(function () { populateResults(); }, 5);
+                    return;
+                }
+
+                var pot1 = group.children[1].children[0].children[0].children[0].innerHTML;
+
+                resultsTemp[i] = [pot1, pot2];
+            }
+
+            for (let i = 7; i >= 0; i--) {
+                var pot = resultsTemp[i];
+                var pot1 = pot[0];
+                var pot2 = pot[1];
+                var key = pot1 + "%" + pot2;
+                results[key] = (results[key] || 0) + 1;
+            }
+            count++;
+            if (count % 5 === 0) {
+                var timePerSim = (Date.now() - start) / count;
+                document.getElementById('counter').innerText = count + ' (' + Math.round(timePerSim) + 'ms per simulation) Time left: ' + msToTime(Math.round(((limit - count) * timePerSim)));
+            }
+            if (count < limit) {
+                restartButton.click();
+                simulate();
+            }
+            else {
+                var total = 0;
+                for (var key in results) {
+                    var value = results[key];
+                    total = total + value;
+                    console.log(key + " - " + value);
+                }
+                console.log('total is ' + total / 8);
+            }
+        }
+
+        function msToTime(s) {
+
+            // Pad to 2 or 3 digits, default is 2
+            function pad(n, z) {
+                z = z || 2;
+                return ('00' + n).slice(-z);
+            }
+
+            var ms = s % 1000;
+            s = (s - ms) / 1000;
+            var secs = s % 60;
+            s = (s - secs) / 60;
+            var mins = s % 60;
+            var hrs = (s - mins) / 60;
+
+            return pad(hrs) + ':' + pad(mins) + ':' + pad(secs) + '.' + pad(ms, 3);
+        }
+    </script>
 </body>
 
 </html>
