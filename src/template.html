@@ -49,7 +49,6 @@
         }
 
         function simulate() {
-            restartButton.click();
             setTimeout(function () {
                 appBody = document.getElementById('app').children[0].children[1];
                 appBody.children[1].style.display = 'none';
@@ -57,14 +56,13 @@
                 var group = appBody.children[0].children[1].children[0];
                 var pot2 = group.children[1].children[1].children[0].children[0].innerHTML;
                 if (!pot2) {
-                    count++;
                     fastDrawButton.click();
                     populateResults();
                 }
                 else {
                     simulate();
                 }
-            }, 0);
+            }, 1);
         }
 
         function populateResults() {
@@ -74,7 +72,8 @@
                 return;
             }
             var groups = appBody.children[0].children[1];
-            for (let i = 7; i > 0; i--) {
+            var resultsTemp = new Array(8);
+            for (let i = 7; i >= 0; i--) {
                 var group = groups.children[i];
                 var pot2 = group.children[1].children[1].children[0].children[0].innerHTML;
                 if (!pot2) {
@@ -84,24 +83,33 @@
 
                 var pot1 = group.children[1].children[0].children[0].children[0].innerHTML;
 
-                var key = pot1 + "%" + pot2;
-                if (results[key]) {
-                    results[key]++;
-                }
-                else {
-                    results[key] = 1;
-                }
+                resultsTemp[i] = [pot1, pot2];
             }
+
+            for (let i = 7; i >= 0; i--) {
+                var pot = resultsTemp[i];
+                var pot1 = pot[0];
+                var pot2 = pot[1];
+                var key = pot1 + "%" + pot2;
+                results[key] = (results[key] || 0) + 1;
+            }
+            count++;
             if (count % 5 === 0) {
                 var timePerSim = (Date.now() - start) / count;
                 document.getElementById('counter').innerText = count + ' (' + Math.round(timePerSim) + 'ms per simulation) Time left: ' + msToTime(Math.round(((limit - count) * timePerSim)));
             }
-            if (count < limit) { simulate(); }
+            if (count < limit) {
+                restartButton.click();
+                simulate();
+            }
             else {
+                var total = 0;
                 for (var key in results) {
                     var value = results[key];
+                    total = total + value;
                     console.log(key + " - " + value);
                 }
+                console.log('total is ' + total / 8);
             }
         }
 
