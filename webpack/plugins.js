@@ -17,12 +17,10 @@ module.exports = (isDev) => compact([
     'process.env': {
       NODE_ENV: JSON.stringify(isDev ? 'development' : 'production'),
     },
-    __MODIFICATION_DATE__: JSON.stringify(currentDate),
-    __VERSION__: JSON.stringify(lastCommitHash),
   }),
 
   !isDev && new MiniCssExtractPlugin({
-    filename: '[name].[contenthash].css',
+    filename: '[name].[contenthash:8].css',
   }),
 
   new HtmlWebpackPlugin({
@@ -39,6 +37,10 @@ module.exports = (isDev) => compact([
       minifyJS: true,
       minifyCSS: true,
       minifyURLs: true,
+    },
+    meta: {
+      version: lastCommitHash,
+      'modification-date': currentDate,
     },
   }),
 

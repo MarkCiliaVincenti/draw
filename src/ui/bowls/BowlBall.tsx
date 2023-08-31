@@ -1,15 +1,17 @@
 import {
-  useRef,
-  useCallback,
+  type DetailedHTMLProps,
+  type HTMLAttributes,
   memo,
-  DetailedHTMLProps,
-  HTMLAttributes,
+  useCallback,
+  useRef,
 } from 'react'
 import styled, { css } from 'styled-components'
 
 import useGlobalEvent from 'utils/hooks/useGlobalEvent'
 
 import Ball from 'ui/Ball'
+
+// TODO: Fix transient props
 
 interface RootProps {
   noHover?: boolean,

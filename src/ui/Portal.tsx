@@ -1,9 +1,9 @@
 import {
-  useRef,
+  type ReactNode,
+  memo,
   useEffect,
   useMemo,
-  memo,
-  type ReactNode,
+  useRef,
 } from 'react'
 
 import ReactDOM from 'react-dom'
@@ -51,7 +51,7 @@ const Portal = ({
 
   return ReactDOM.createPortal(
     children,
-    elRef.current!, // this.props.modalRoot is possible
+    elRef.current, // this.props.modalRoot is possible
   )
 }
 

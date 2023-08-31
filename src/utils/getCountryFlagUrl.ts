@@ -2,7 +2,7 @@ import { memoize } from 'lodash'
 
 import countries from 'data/countries'
 
-import { Country } from 'model/types'
+import { type Country } from 'model/types'
 
 declare const require: any
 
@@ -15,7 +15,7 @@ const flags = {
 } as const
 
 function getCountryFlagUrl(country: Country) {
-  const exceptionalFlag = flags[country] as string
+  const exceptionalFlag = flags[country as keyof typeof flags]
   if (exceptionalFlag) {
     return exceptionalFlag
   }

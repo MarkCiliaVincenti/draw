@@ -1,8 +1,7 @@
 import { memo } from 'react'
-import { FlattenInterpolation } from 'styled-components'
-import { range } from 'lodash'
+import { type RuleSet } from 'styled-components'
 
-import Team from 'model/team'
+import type Team from 'model/team'
 
 import Row from 'ui/table/Row'
 import Cell from 'ui/table/Cell'
@@ -18,7 +17,7 @@ interface Props {
   pickedTeams: readonly Team[],
   selectedTeams: readonly Team[] | null,
   numCols: number,
-  headerStyles?: FlattenInterpolation<any>,
+  headerStyles?: RuleSet<any>,
 }
 
 function Pot({
@@ -33,14 +32,14 @@ function Pot({
   const numRows = teams.length / numCols
 
   return (
-    <Root highlighted={isCurrent}>
+    <Root $highlighted={isCurrent}>
       <thead>
         <Row>
           <Cell colSpan={numCols}>
             <Header
-              highlighted={isCurrent}
-              depleted={!teams || pickedTeams.length === teams.length}
-              styles={headerStyles}
+              $highlighted={isCurrent}
+              $depleted={!teams || pickedTeams.length === teams.length}
+              $styles={headerStyles}
             >
               Pot {potNum + 1}
             </Header>
@@ -48,9 +47,10 @@ function Pot({
         </Row>
       </thead>
       <tbody>
-        {range(numRows).map(i => {
+        {Array.from({ length: numRows }, (_, i) => {
           const offset = i * numCols
-          const rowTeams = range(numCols).map(c => teams[offset + c])
+          // eslint-disable-next-line @typescript-eslint/no-shadow, no-shadow
+          const rowTeams = Array.from({ length: numCols }, (_, c) => teams[offset + c])
 
           return (
             <PotRow

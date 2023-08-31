@@ -32,7 +32,7 @@ module.exports = (env) => {
     output: {
       clean: true,
       path: distDir,
-      filename: `[name]${isDev ? '' : '.[contenthash]'}.js`,
+      filename: `[name]${isDev ? '' : '.[contenthash:8]'}.js`,
       sourceMapFilename: '[file].map',
       globalObject: isDev ? 'this' : undefined, // TODO
     },
@@ -47,10 +47,13 @@ module.exports = (env) => {
         path.resolve(rootDir, 'src'),
         'node_modules',
       ],
-      // alias: isDev ? undefined : {
-      //   'react': path.join(rootDir, 'node_modules/react/dist/react.min.js'),
-      //   'react-dom': path.join(rootDir, 'node_modules/react-dom/dist/react-dom.min.js'),
-      // },
+      alias: isDev
+        ? undefined
+        : {
+          lodash: path.join(rootDir, 'node_modules/lodash-es'),
+          // 'react': path.join(rootDir, 'node_modules/react/dist/react.min.js'),
+          // 'react-dom': path.join(rootDir, 'node_modules/react-dom/dist/react-dom.min.js'),
+        },
     },
     devtool: isDev ? 'eval-source-map' : undefined,
     optimization: optimization(isDev),

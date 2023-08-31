@@ -1,9 +1,9 @@
 import {
-  useState,
-  useEffect,
-  useCallback,
+  type RefObject,
   memo,
-  RefObject,
+  useCallback,
+  useEffect,
+  useState,
 } from 'react'
 
 import delay from 'delay.js'

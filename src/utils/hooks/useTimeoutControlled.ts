@@ -1,19 +1,23 @@
 import {
-  useState,
   useEffect,
+  useState,
 } from 'react'
 
-export default (delay: number) => {
+type ResetKey = string | number | bigint | boolean | null | undefined;
+
+export default (delayMs: number, resetKey?: ResetKey) => {
   const [isTimedOut, setIsTimedOut] = useState(false)
 
   useEffect(() => {
+    setIsTimedOut(false)
     const handle = setTimeout(() => {
       setIsTimedOut(true)
-    }, delay)
+    }, delayMs)
+
     return () => {
       clearTimeout(handle)
     }
-  }, [])
+  }, [resetKey])
 
   return isTimedOut
 }

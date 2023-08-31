@@ -14,7 +14,14 @@ module.exports = {
   parser: '@typescript-eslint/parser',
 
   parserOptions: {
-    project: './tsconfig.json',
+    tsconfigRootDir: __dirname,
+    project: [
+      './tsconfig.json'
+    ],
+    ecmaFeatures: {
+      jsx: true,
+    },
+    jsxPragma: null,
   },
 
   settings: {
@@ -54,6 +61,82 @@ module.exports = {
     'object-property-newline': [2, {
       allowAllPropertiesOnSameLine: false,
     }],
+    // Only for ordering members
+    "sort-imports": [
+      2,
+      {
+        ignoreDeclarationSort: true,
+      },
+    ],
+
+    "inker/enforce-import-name": [
+      2,
+      {
+        paths: [
+          {
+            name: "date-fns",
+            importNames: [
+              {
+                imported: "format",
+                local: "formatDate",
+              },
+              {
+                imported: "isValid",
+                local: "isDateValid",
+              },
+            ],
+          },
+          {
+            name: "lodash",
+            importNames: [
+              {
+                imported: "namespace",
+                local: "_",
+              },
+              {
+                imported: "default",
+                local: "_",
+              },
+            ],
+          },
+          {
+            name: "react",
+            importNames: [
+              {
+                imported: "default",
+                local: "React",
+              },
+            ],
+          },
+          {
+            name: "uuid",
+            importNames: [
+              {
+                imported: "v4",
+                local: "uuidv4",
+              },
+            ],
+          },
+          {
+            pattern: "{,**,./,../,../../}/styles.module.{scss,css}",
+            importNames: [
+              {
+                imported: "default",
+                local: "styles",
+              },
+            ],
+          },
+        ],
+      },
+    ],
+    "inker/no-true-as-default": 2,
+    "inker/react-hooks-order": [
+      2,
+      {
+        order: ["useDispatch", "useSelector", "useAbility", "useNavigate"],
+      },
+    ],
+    "inker/react-ref-name": 2,
 
     'react/prop-types': 0,
     'react/react-in-jsx-scope': 0,
@@ -83,12 +166,22 @@ module.exports = {
     }],
     '@typescript-eslint/no-explicit-any': 0,
     '@typescript-eslint/no-extra-parens': 0,
+    '@typescript-eslint/no-floating-promises': 0,
+    '@typescript-eslint/no-misused-promises': 0,
     '@typescript-eslint/no-non-null-assertion': 0,
+    '@typescript-eslint/restrict-template-expressions': 0,
+    '@typescript-eslint/unbound-method': 0,
+    '@typescript-eslint/no-unsafe-argument': 0,
+    '@typescript-eslint/no-unsafe-assignment': 0,
+    '@typescript-eslint/no-unsafe-call': 0,
+    '@typescript-eslint/no-unsafe-member-access': 0,
+    '@typescript-eslint/no-unsafe-return': 0,
     '@typescript-eslint/no-unused-vars': [2, {
       vars: 'all',
       args: 'after-used',
       ignoreRestSiblings: false,
     }],
+    '@typescript-eslint/prefer-nullish-coalescing': 0,
     '@typescript-eslint/prefer-optional-chain': 2,
     '@typescript-eslint/prefer-readonly': 2,
     // '@typescript-eslint/prefer-readonly-parameter-types': 2,

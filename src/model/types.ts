@@ -1,4 +1,4 @@
-import countries from 'data/countries'
+import type countries from 'data/countries'
 
 type Entry<T> = {
   [P in keyof T]: [P, T[P]];
@@ -21,3 +21,10 @@ type GrowToSize<T, A extends T[], N extends number> = {
 }[A['length'] extends N ? 0 : 1]
 
 export type FixedArray<T, N extends number> = GrowToSize<T, [], N>
+
+export type OptionalPropertyOf<T> = {
+  [K in keyof T]-?: undefined extends T[K] ? K : never
+}[keyof T]
+
+export type Reverse<Tuple> = Tuple extends readonly [infer Head, ...infer Rest]
+  ? readonly [...Reverse<Rest>, Head] : readonly [];

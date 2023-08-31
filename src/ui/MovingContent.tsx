@@ -1,16 +1,16 @@
 import {
-  useState,
+  type RefObject,
+  type TransitionEvent,
+  memo,
+  useCallback,
   useLayoutEffect,
   useMemo,
-  useCallback,
-  memo,
-  RefObject,
-  TransitionEvent,
+  useState,
 } from 'react'
 import styled from 'styled-components'
 
-import Team from 'model/team'
-import Club from 'model/team/Club'
+import type Team from 'model/team'
+import type Club from 'model/team/Club'
 
 import getTeamCountryName from 'utils/getTeamCountryName'
 
@@ -82,7 +82,7 @@ function MovingContent({
   return posCell && (
     <FixedOverlay>
       <ContentWithFlagFixed
-        country={getTeamCountryName(team)}
+        $country={getTeamCountryName(team)}
         style={style}
         onTransitionEnd={onTransitionEnd}
       >

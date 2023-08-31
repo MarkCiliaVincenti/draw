@@ -1,9 +1,9 @@
 import {
-  useState,
+  memo,
   useCallback,
   useEffect,
   useRef,
-  memo,
+  useState,
 } from 'react'
 
 import { css } from 'styled-components'
@@ -14,18 +14,22 @@ import {
   shuffle,
 } from 'lodash'
 
-import Team from 'model/team/GsTeam'
+import type Team from 'model/team/GsTeam'
+import {
+  type GsWorkerData,
+  type GsWorkerFirstPossibleResponseData,
+  type GsWorkerPossibleGroupsResponseData,
+} from 'model/WorkerData'
 
 import usePopup from 'store/usePopup'
 import useDrawId from 'store/useDrawId'
 import useFastDraw from 'store/useFastDraw'
 import useXRay from 'store/useXRay'
 
-import useWorkerReqResp from 'utils/hooks/useWorkerReqResp'
+import useWorkerSendAndReceive from 'utils/hooks/useWorkerSendAndReceive'
 
 import PageRoot from 'ui/PageRoot'
 import PotsContainer from 'ui/PotsContainer'
-// import AirborneContainer from 'ui/AirborneContainer'
 import GroupsContainer from 'ui/GroupsContainer'
 import TablesContainer from 'ui/TablesContainer'
 import BowlsContainer from 'ui/BowlsContainer'
@@ -46,21 +50,6 @@ const redGroup = css`
 const blueGroup = css`
   background-color: ${props => props.theme.isDarkMode ? '#039' : '#c0e0ff'};
 `
-
-interface WorkerRequest {
-  season: number,
-  pots: readonly (readonly Team[])[],
-  groups: readonly (readonly Team[])[],
-  selectedTeam: Team,
-}
-
-interface FirstPossibleGroupWorkerResponse {
-  pickedGroup: number,
-}
-
-interface AllPossibleGroupsWorkerResponse {
-  possibleGroups: number[],
-}
 
 interface Props {
   season: number,
@@ -120,10 +109,11 @@ function CLGS({
 
   const [, setPopup] = usePopup()
   const [isXRay] = useXRay()
+
   // eslint-disable-next-line max-len
-  const getFirstPossibleGroupResponse = useWorkerReqResp<WorkerRequest, FirstPossibleGroupWorkerResponse>(getFirstPossibleGroupWorker)
+  const getFirstPossibleGroupResponse = useWorkerSendAndReceive<GsWorkerData<Team>, GsWorkerFirstPossibleResponseData>(getFirstPossibleGroupWorker)
   // eslint-disable-next-line max-len
-  const getAllPossibleGroupsResponse = useWorkerReqResp<WorkerRequest, AllPossibleGroupsWorkerResponse>(getAllPossibleGroupsWorker)
+  const getAllPossibleGroupsResponse = useWorkerSendAndReceive<GsWorkerData<Team>, GsWorkerPossibleGroupsResponseData>(getAllPossibleGroupsWorker)
 
   const groupsContanerRef = useRef<HTMLElement>(null)
 

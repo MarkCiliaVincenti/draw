@@ -1,6 +1,6 @@
 import {
-  useContext,
   memo,
+  useContext,
 } from 'react'
 import styled, { ThemeContext } from 'styled-components'
 import GitHubButton from 'react-github-btn'
@@ -18,7 +18,7 @@ const Root = styled.div`
 
 function GitHubButtons() {
   const themeContext = useContext(ThemeContext)
-  const { isDarkMode } = themeContext
+  const { isDarkMode } = themeContext ?? {}
 
   return (
     <Root>

@@ -1,9 +1,8 @@
 import { memo } from 'react'
-import { FlattenInterpolation } from 'styled-components'
-import { range } from 'lodash'
+import { type RuleSet } from 'styled-components'
 
-import Club from 'model/team/Club'
-import NationalTeam from 'model/team/NationalTeam'
+import type Club from 'model/team/Club'
+import type NationalTeam from 'model/team/NationalTeam'
 
 import Table from 'ui/table/Table'
 import Header from 'ui/table/Header'
@@ -20,7 +19,7 @@ interface Props {
   teams: readonly Team[],
   potNum: number,
   possible: boolean,
-  headerStyles?: FlattenInterpolation<any>,
+  headerStyles?: RuleSet<any>,
 }
 
 function Group({
@@ -36,7 +35,7 @@ function Group({
       <thead>
         <Row>
           <Cell>
-            <Header styles={headerStyles}>
+            <Header $styles={headerStyles}>
               Group
               {' '}
               {groupLetter}
@@ -45,7 +44,7 @@ function Group({
         </Row>
       </thead>
       <tbody>
-        {range(maxTeams).map(i => (
+        {Array.from({ length: maxTeams }, (_, i) => (
           <Row key={i}>
             <GroupCellDeferred
               team={teams[i]}

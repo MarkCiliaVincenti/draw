@@ -1,21 +1,19 @@
-import { Predicate } from '@draws/engine'
 import {
-  identity,
   countBy,
-  sumBy,
+  identity,
   mapValues,
+  sumBy,
 } from 'lodash'
 
-import { Confederation } from 'model/types'
-import NationalTeam from 'model/team/NationalTeam'
-import UnknownNationalTeam from 'model/team/UnknownNationalTeam'
+import { type Confederation } from 'model/types'
+import type NationalTeam from 'model/team/NationalTeam'
+import type UnknownNationalTeam from 'model/team/UnknownNationalTeam'
+import { type Predicate } from 'engine/backtracking/gs'
 import getSmallestArrayLength from 'utils/getSmallestArrayLength'
 
 import getNumGroupsByYear from './getNumGroupsByYear'
 
-type BerthsByConf = {
-  [key in Confederation]: number
-}
+type BerthsByConf = Record<Confederation, number>
 
 type Team = NationalTeam | UnknownNationalTeam
 

@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components'
 import BowlBall from '../BowlBall'
 
 interface Props {
-  notSelected?: boolean,
+  $notSelected?: boolean,
 }
 
 const TeamBall = styled(BowlBall)<Props>`
@@ -11,7 +11,7 @@ const TeamBall = styled(BowlBall)<Props>`
     ${props =>
     props.selected
       ? '#004'
-      : props.notSelected
+      : props.$notSelected
         ? '#ddd'
         : 'radial-gradient(#fff, #004)'};
   cursor: ${props => props.noHover ? 'not-allowed' : 'pointer'};

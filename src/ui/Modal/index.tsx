@@ -1,6 +1,6 @@
 import {
-  memo,
   type ReactNode,
+  memo,
 } from 'react'
 
 import Background from './Background'
@@ -17,7 +17,7 @@ function Modal({
 }: Props) {
   return (
     <div>
-      <Background animate={!noAnimation} />
+      <Background $animate={!noAnimation} />
       <Body>
         {children}
       </Body>
@@ -25,4 +25,4 @@ function Modal({
   )
 }
 
-export default memo(Modal) as typeof Modal
+export default memo(Modal)

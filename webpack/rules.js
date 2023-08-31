@@ -1,32 +1,17 @@
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const { createLodashTransformer } = require('typescript-plugin-lodash')
-const createStyledComponentsTransformer = require('typescript-plugin-styled-components').default
+// const createStyledComponentsTransformer = require('typescript-plugin-styled-components').default
 const { compact } = require('lodash')
 
-const lodashTransformer = createLodashTransformer()
-const styledComponentsTransformer = createStyledComponentsTransformer()
-
-const tsOptions = (isDev) => isDev ? {
-  getCustomTransformers: () => ({
-    before: [
-      styledComponentsTransformer,
-    ],
-  }),
-} : {
-  getCustomTransformers: () => ({
-    before: [
-      lodashTransformer,
-    ],
-  }),
-  ignoreDiagnostics: [],
-}
+// const styledComponentsTransformer = createStyledComponentsTransformer()
 
 module.exports = (isDev) => compact([
   {
     test: /\.tsx?$/,
     use: {
-      loader: 'ts-loader',
-      options: tsOptions(isDev),
+      loader: 'esbuild-loader',
+      options: {
+        target: 'es2021',
+      },
     },
     exclude: /node_modules/,
   },
@@ -41,14 +26,14 @@ module.exports = (isDev) => compact([
     test: /\.(png|jpe?g|gif|svg)$/,
     type: 'asset/resource',
     generator: {
-      filename: `images/[name]${isDev ? '' : '.[contenthash]'}[ext]`,
+      filename: `images/[name]${isDev ? '' : '.[contenthash:8]'}[ext]`,
     },
   },
   {
     test: /\.txt$/,
     type: 'asset/source',
     generator: {
-      filename: `data/[name]${isDev ? '' : '.[contenthash]'}[ext]`,
+      filename: `data/[name]${isDev ? '' : '.[contenthash:8]'}[ext]`,
     },
   },
 ])

@@ -1,11 +1,11 @@
 import {
-  memo,
   forwardRef,
+  memo,
 } from 'react'
-import styled, { FlattenInterpolation } from 'styled-components'
+import styled, { type RuleSet } from 'styled-components'
 
-import Club from 'model/team/Club'
-import NationalTeam from 'model/team/NationalTeam'
+import type Club from 'model/team/Club'
+import type NationalTeam from 'model/team/NationalTeam'
 import getGroupLetter from 'utils/getGroupLetter'
 
 import Group from './Group'
@@ -27,7 +27,7 @@ interface Props {
   currentPotNum: number,
   groups: readonly (readonly Team[])[],
   possibleGroups: readonly number[] | null,
-  getGroupHeaderStyles?: (index: number) => FlattenInterpolation<any>,
+  getGroupHeaderStyles?: (index: number) => RuleSet<any>,
 }
 
 const GroupsContainer = forwardRef((

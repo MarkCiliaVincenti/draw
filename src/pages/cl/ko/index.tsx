@@ -1,30 +1,32 @@
 import {
-  useState,
-  useCallback,
-  useMemo,
-  useEffect,
-  useRef,
   memo,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
 } from 'react'
 
 import {
-  range,
   random,
   shuffle,
 } from 'lodash'
 
-import Team from 'model/team/KnockoutTeam'
+import type Team from 'model/team/KnockoutTeam'
+import {
+  type KoWorkerData,
+  type KoWorkerResponseData,
+} from 'model/WorkerData'
 
 import usePopup from 'store/usePopup'
 import useDrawId from 'store/useDrawId'
 import useFastDraw from 'store/useFastDraw'
 import useXRay from 'store/useXRay'
 
-import useWorkerReqResp from 'utils/hooks/useWorkerReqResp'
+import useWorkerSendAndReceive from 'utils/hooks/useWorkerSendAndReceive'
 
 import PageRoot from 'ui/PageRoot'
 import PotsContainer from 'ui/PotsContainer'
-// import AirborneContainer from 'ui/AirborneContainer'
 import MatchupsContainer from 'ui/MatchupsContainer'
 import TablesContainer from 'ui/TablesContainer'
 import BowlsContainer from 'ui/BowlsContainer'
@@ -34,16 +36,6 @@ import Announcement from 'ui/Announcement'
 
 const getEsWorker = () =>
   new Worker(new URL('./worker', import.meta.url))
-
-interface WorkerRequest {
-  season: number,
-  pots: readonly (readonly Team[])[],
-  matchups: readonly [Team, Team][],
-}
-
-interface WorkerResponse {
-  possiblePairings: number[],
-}
 
 interface Props {
   season: number,
@@ -61,12 +53,13 @@ interface State {
 function getState(initialPots: readonly (readonly Team[])[]): State {
   const currentPotNum = 1
   const currentMatchupNum = 0
+  const numMatchups = 8
   return {
     currentMatchupNum,
     currentPotNum,
     possiblePairings: null,
     pots: initialPots.map(pot => shuffle(pot)),
-    matchups: range(8).map(() => [] as any),
+    matchups: Array.from({ length: numMatchups }, () => [] as any),
   }
 }
 
@@ -91,25 +84,33 @@ function CLKO({
 
   const [, setPopup] = usePopup()
   const [isXRay] = useXRay()
-  const workerSendAndReceive = useWorkerReqResp<WorkerRequest, WorkerResponse>(getEsWorker)
+
+  // eslint-disable-next-line max-len
+  const getPossiblePairingsResponse = useWorkerSendAndReceive<KoWorkerData<Team>, KoWorkerResponseData>(getEsWorker)
 
   const groupsContanerRef = useRef<HTMLElement>(null)
 
-  const getPossiblePairings = useCallback(async (newPots, newMatchups) => {
-    try {
-      const response = await workerSendAndReceive({
-        season,
-        pots: newPots,
-        matchups: newMatchups,
-      })
-      return response.possiblePairings
-    } catch (err) {
-      setPopup({
-        error: 'Could not determine possible pairings',
-      })
-      throw err
-    }
-  }, [season, workerSendAndReceive])
+  const getPossiblePairings = useCallback(
+    async (
+      newPots: readonly (readonly Team[])[],
+      newMatchups: readonly [Team, Team][],
+    ) => {
+      try {
+        const response = await getPossiblePairingsResponse({
+          season,
+          pots: newPots,
+          matchups: newMatchups,
+        })
+        return response.possiblePairings
+      } catch (err) {
+        setPopup({
+          error: 'Could not determine possible pairings',
+        })
+        throw err
+      }
+    },
+    [season, getPossiblePairingsResponse],
+  )
 
   const onBallPick = useCallback(async (i: number) => {
     const currentPot = pots[currentPotNum]

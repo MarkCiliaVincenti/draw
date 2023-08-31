@@ -1,6 +1,6 @@
-import type { Predicate } from '@draws/engine'
+import { type Predicate } from 'engine/backtracking/gs'
 
-type OneOrTwo<T> = [T] | [T, T]
+type OneOrTwo<T> = readonly [T] | readonly [T, T]
 
 function anyGroupWinners<T>(
   item: T,
@@ -38,11 +38,12 @@ function anyRunnersUp<T>(
     .some(item => anyGroupWinners(item, [groupWinners, newRunnersUp], newMatchups, predicate))
 }
 
-export default <T>(
+// eslint-disable-next-line import/prefer-default-export
+export const getPossiblePairings = <T>(
   [groupWinners, runnersUp]: readonly (readonly T[])[],
   matchups: readonly OneOrTwo<T>[],
   predicate: Predicate<T>,
 ): number[] =>
-  groupWinners
-    .map((item, i) => i)
-    .filter(i => anyGroupWinners(groupWinners[i], [groupWinners, runnersUp], matchups, predicate))
+    groupWinners
+      .map((item, i) => i)
+      .filter(i => anyGroupWinners(groupWinners[i], [groupWinners, runnersUp], matchups, predicate))

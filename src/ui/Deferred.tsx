@@ -1,9 +1,9 @@
 import {
-  memo,
   type ReactElement,
+  memo,
 } from 'react'
 
-import useTimeout from 'utils/hooks/useTimeout'
+import useTimeoutControlled from 'utils/hooks/useTimeoutControlled'
 
 interface Props {
   delay: number,
@@ -14,8 +14,8 @@ function Deferred({
   children,
   delay,
 }: Props) {
-  const isTimedOut = useTimeout(delay)
+  const isTimedOut = useTimeoutControlled(delay)
   return isTimedOut ? children : null
 }
 
-export default memo(Deferred) as typeof Deferred
+export default memo(Deferred)

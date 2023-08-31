@@ -1,11 +1,11 @@
 import {
-  useCallback,
   memo,
+  useCallback,
 } from 'react'
 import styled from 'styled-components'
 
-import Tournament from 'model/Tournament'
-import Stage from 'model/Stage'
+import type Tournament from 'model/Tournament'
+import type Stage from 'model/Stage'
 
 import useTheme from 'store/useTheme'
 
@@ -61,7 +61,7 @@ interface Props {
   season: number,
   tournament: Tournament,
   stage: Stage,
-  onSeasonChange: (tournament: Tournament, stage: Stage, season: number) => void,
+  onSeasonChange: (tournament: Tournament, stage: Stage, season?: number) => void,
 }
 
 function Navbar({

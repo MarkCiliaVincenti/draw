@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components'
 
-import { Country } from 'model/types'
+import { type Country } from 'model/types'
 import getCountryFlagUrl from 'utils/getCountryFlagUrl'
 
 import Content from './Content'
@@ -18,11 +18,11 @@ const ContentWithoutFlag = styled(Content)`
 `
 
 interface Props {
-  country?: Country,
+  $country?: Country,
 }
 
 const ContentWithFlag = styled(ContentWithoutFlag)<Props>`
-  ${({ country }) => country && css`
+  ${({ $country: country }) => country && css`
     background-image: url('${getCountryFlagUrl(country)}');
   `}
 `

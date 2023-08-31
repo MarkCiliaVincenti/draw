@@ -1,8 +1,11 @@
 import fastDelete from 'fast-delete'
 
-import GsTeam from 'model/team/GsTeam'
+import type GsTeam from 'model/team/GsTeam'
 
-export default (teams: readonly GsTeam[], pairings: readonly [string, string][]) => {
+export default (
+  teams: readonly GsTeam[],
+  pairings: readonly (readonly [string, string])[],
+) => {
   const teamsCopy = teams.slice()
 
   for (const [team1str, team2str] of pairings) {

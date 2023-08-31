@@ -1,9 +1,9 @@
 import {
-  useCallback,
   memo,
+  useCallback,
 } from 'react'
 
-import type { Theme } from 'store/useTheme'
+import { type Theme } from 'store/useTheme'
 
 import Select from 'ui/SelectWithHiddenLabel'
 

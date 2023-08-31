@@ -2,7 +2,7 @@ import { memo } from 'react'
 import { css } from 'styled-components'
 import { difference } from 'lodash'
 
-import Team from 'model/team'
+import type Team from 'model/team'
 
 import Root from './Root'
 import Pot from './Pot'
@@ -28,7 +28,7 @@ function PotsContainer({
   split,
 }: Props) {
   return (
-    <Root limitWidth={!split}>
+    <Root $limitWidth={!split}>
       {initialPots.map((pot, i) => {
         const isCurrent = i === currentPotNum
         const pickedTeams = difference(initialPots[i], pots[i], selectedTeams ?? [])

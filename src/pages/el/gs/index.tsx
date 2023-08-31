@@ -1,9 +1,9 @@
 import {
-  useState,
+  memo,
   useCallback,
   useEffect,
   useRef,
-  memo,
+  useState,
 } from 'react'
 
 import { css } from 'styled-components'
@@ -13,18 +13,21 @@ import {
   shuffle,
 } from 'lodash'
 
-import Team from 'model/team/GsTeam'
+import type Team from 'model/team/GsTeam'
+import {
+  type GsWorkerData,
+  type GsWorkerFirstPossibleResponseData,
+} from 'model/WorkerData'
 
 import usePopup from 'store/usePopup'
 import useDrawId from 'store/useDrawId'
 import useFastDraw from 'store/useFastDraw'
 import useXRay from 'store/useXRay'
 
-import useWorkerReqResp from 'utils/hooks/useWorkerReqResp'
+import useWorkerSendAndReceive from 'utils/hooks/useWorkerSendAndReceive'
 
 import PageRoot from 'ui/PageRoot'
 import PotsContainer from 'ui/PotsContainer'
-// import AirborneContainer from 'ui/AirborneContainer'
 import GroupsContainer from 'ui/GroupsContainer'
 import TablesContainer from 'ui/TablesContainer'
 import BowlsContainer from 'ui/BowlsContainer'
@@ -41,17 +44,6 @@ const redGroup = css`
 const blueGroup = css`
   background-color: ${props => props.theme.isDarkMode ? '#039' : '#c0e0ff'};
 `
-
-interface WorkerRequest {
-  season: number,
-  pots: readonly (readonly Team[])[],
-  groups: readonly (readonly Team[])[],
-  selectedTeam: Team,
-}
-
-interface WorkerResponse {
-  pickedGroup: number,
-}
 
 interface Props {
   season: number,
@@ -103,7 +95,9 @@ function ELGS({
 
   const [, setPopup] = usePopup()
   const [isXRay] = useXRay()
-  const workerSendAndReceive = useWorkerReqResp<WorkerRequest, WorkerResponse>(getEsWorker)
+
+  // eslint-disable-next-line max-len
+  const getFirstPossibleGroupResponse = useWorkerSendAndReceive<GsWorkerData<Team>, GsWorkerFirstPossibleResponseData>(getEsWorker)
 
   const groupsContanerRef = useRef<HTMLElement>(null)
 
@@ -114,7 +108,7 @@ function ELGS({
 
     let newPickedGroup: number | undefined
     try {
-      const response = await workerSendAndReceive({
+      const response = await getFirstPossibleGroupResponse({
         season,
         pots,
         groups,

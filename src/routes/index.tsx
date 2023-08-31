@@ -1,16 +1,16 @@
 import {
-  useEffect,
-  useCallback,
-  useMemo,
   memo,
+  useCallback,
+  useEffect,
+  useMemo,
 } from 'react'
 
 import {
-  Route,
   Navigate,
+  Route,
   Routes,
-  useNavigate,
   useMatch,
+  useNavigate,
 } from 'react-router-dom'
 
 import usePopup from 'store/usePopup'
@@ -19,8 +19,8 @@ import useFastDraw from 'store/useFastDraw'
 
 import Visibility from 'ui/Visibility'
 
-import Tournament from 'model/Tournament'
-import Stage from 'model/Stage'
+import type Tournament from 'model/Tournament'
+import type Stage from 'model/Stage'
 
 import config from '../config'
 
@@ -42,11 +42,11 @@ const {
 
 function useSeasonTournamentStage() {
   const match = useMatch(':tournament/:stage/*')
-  const params = match?.params ?? {}
+  const params = match?.params
   const {
     tournament,
     stage,
-  } = params as Path
+  } = (params ?? {}) as Path
 
   const season = params
     ? +(params['*'] || currentSeasonByTournament(tournament || null, stage || null))
@@ -60,6 +60,8 @@ function useSeasonTournamentStage() {
 }
 
 function Routing() {
+  const navigate = useNavigate()
+
   const [drawId, refreshDrawId] = useDrawId()
   const [popup] = usePopup()
   const [, setIsFastDraw] = useFastDraw()
@@ -77,8 +79,6 @@ function Routing() {
     season,
   } = o
 
-  const navigate = useNavigate()
-
   const onSeasonChange = useCallback((tm: Tournament, sg: Stage, sn?: number) => {
     navigate(`/${tm}/${sg}${sn ? `/${sn}` : ''}`)
   }, [])
@@ -86,7 +86,7 @@ function Routing() {
   return (
     <>
       <HeadMetadata />
-      <Visibility visible={!popup.initial}>
+      <Visibility $visible={!popup.initial}>
         <Navbar
           season={season}
           tournament={tournament!}

@@ -1,9 +1,9 @@
-import styled, { FlattenInterpolation } from 'styled-components'
+import styled, { type RuleSet } from 'styled-components'
 
 import BaseContent from './BaseContent'
 
 interface Props {
-  styles?: FlattenInterpolation<any>,
+  $styles?: RuleSet<any>,
 }
 
 const Header = styled(BaseContent)<Props>`
@@ -11,7 +11,7 @@ const Header = styled(BaseContent)<Props>`
   width: 100%;
   height: 100%;
   font-weight: 600;
-  ${props => props.styles}
+  ${props => props.$styles}
 `
 
 export default Header

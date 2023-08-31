@@ -1,11 +1,10 @@
 import {
+  type DetailedHTMLProps,
+  type SelectHTMLAttributes,
   memo,
-  DetailedHTMLProps,
-  SelectHTMLAttributes,
+  useId,
 } from 'react'
 import styled, { css } from 'styled-components'
-
-import useRandom from 'utils/hooks/useRandom'
 
 const Root = styled.div`
   display: inline;
@@ -50,7 +49,7 @@ function SelectWithHiddenLabel({
   children,
   ...props
 }: Props) {
-  const [id] = useRandom('select-')
+  const id = useId()
 
   return (
     <Root>
